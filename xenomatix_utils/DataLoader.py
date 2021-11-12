@@ -6,28 +6,29 @@ from torch.utils.data import Dataset
 
 
 class S3DISDataset(Dataset):
-    def __init__(self, split='train', data_root='trainval_fullarea', num_point=4096, test_area=5, block_size=1.0, sample_rate=1.0, transform=None):
+    def __init__(self, split='train', data_root='trainval_fullarea', num_point=4096, test_scene=5, block_size=1.0, sample_rate=1.0, transform=None):
         super().__init__()
         self.num_point = num_point
         self.block_size = block_size
         self.transform = transform
-        rooms = sorted(os.listdir(data_root))
-        rooms = [room for room in rooms if 'Area_' in room]
+        frames = sorted(os.listdir(data_root))
+        frames = [frame for frame in frames if 'Scene_' in frame]
         if split == 'train':
-            rooms_split = [room for room in rooms if not 'Area_{}'.format(test_area) in room]
+            frames_split = [frame for frame in frames if not 'Scene_{}'.format(test_scene) in frame]
         else:
-            rooms_split = [room for room in rooms if 'Area_{}'.format(test_area) in room]
+            frames_split = [frame for frame in frames if 'Scene_{}'.format(test_scene) in frame]
 
         self.room_points, self.room_labels = [], []
         self.room_coord_min, self.room_coord_max = [], []
         num_point_all = []
-        labelweights = np.zeros(13)
+        labelweights = np.zeros(2)
 
-        for room_name in tqdm(rooms_split, total=len(rooms_split)):
+        for room_name in tqdm(frames_split, total=len(frames_split)):
             room_path = os.path.join(data_root, room_name)
-            room_data = np.load(room_path)  # xyzrgbl, N*7
-            points, labels = room_data[:, 0:6], room_data[:, 6]  # xyzrgb, N*6; l, N
-            tmp, _ = np.histogram(labels, range(14))
+            print(room_path)
+            room_data = np.load(room_path)  # xyzil, N*5
+            points, labels = room_data[:, 0:4], room_data[:, 4]  # xyzi, N*4; l, N
+            tmp, _ = np.histogram(labels, range(2))
             labelweights += tmp
             coord_min, coord_max = np.amin(points, axis=0)[:3], np.amax(points, axis=0)[:3]
             self.room_points.append(points), self.room_labels.append(labels)
@@ -40,7 +41,7 @@ class S3DISDataset(Dataset):
         sample_prob = num_point_all / np.sum(num_point_all)
         num_iter = int(np.sum(num_point_all) * sample_rate / num_point)
         room_idxs = []
-        for index in range(len(rooms_split)):
+        for index in range(len(frames_split)):
             room_idxs.extend([index] * int(round(sample_prob[index] * num_iter)))
         self.room_idxs = np.array(room_idxs)
         print("Totally {} samples in {} set.".format(len(self.room_idxs), split))
@@ -72,8 +73,8 @@ class S3DISDataset(Dataset):
         current_points[:, 8] = selected_points[:, 2] / self.room_coord_max[room_idx][2]
         selected_points[:, 0] = selected_points[:, 0] - center[0]
         selected_points[:, 1] = selected_points[:, 1] - center[1]
-        selected_points[:, 3:6] /= 255.0
-        current_points[:, 0:6] = selected_points
+        # selected_points[:, 3:6] /= 255.0
+        current_points[:, 0:4] = selected_points
         current_labels = labels[selected_point_idxs]
         if self.transform is not None:
             current_points, current_labels = self.transform(current_points, current_labels)
@@ -84,7 +85,7 @@ class S3DISDataset(Dataset):
 
 class ScannetDatasetWholeScene():
     # prepare to give prediction on each points
-    def __init__(self, root, block_points=4096, split='test', test_area=5, stride=0.5, block_size=1.0, padding=0.001):
+    def __init__(self, root, block_points=4096, split='test', test_scene=5, stride=0.5, block_size=1.0, padding=0.001):
         self.block_points = block_points
         self.block_size = block_size
         self.padding = padding
@@ -94,9 +95,9 @@ class ScannetDatasetWholeScene():
         self.scene_points_num = []
         assert split in ['train', 'test']
         if self.split == 'train':
-            self.file_list = [d for d in os.listdir(root) if d.find('Area_%d' % test_area) is -1]
+            self.file_list = [d for d in os.listdir(root) if d.find('Scene_%d' % test_scene) == -1]
         else:
-            self.file_list = [d for d in os.listdir(root) if d.find('Area_%d' % test_area) is not -1]
+            self.file_list = [d for d in os.listdir(root) if d.find('Scene_%d' % test_scene) != -1]
         self.scene_points_list = []
         self.semantic_labels_list = []
         self.room_coord_min, self.room_coord_max = [], []
@@ -171,10 +172,10 @@ class ScannetDatasetWholeScene():
         return len(self.scene_points_list)
 
 if __name__ == '__main__':
-    data_root = '/data/yxu/PointNonLocal/data/stanford_indoor3d/'
-    num_point, test_area, block_size, sample_rate = 4096, 5, 1.0, 0.01
+    data_root = '/home/test/Pointnet_Pointnet2_pytorch/sample/output'
+    num_point, test_scene, block_size, sample_rate = 4096, 1, 1.0, 0.01
 
-    point_data = S3DISDataset(split='train', data_root=data_root, num_point=num_point, test_area=test_area, block_size=block_size, sample_rate=sample_rate, transform=None)
+    point_data = S3DISDataset(split='train', data_root=data_root, num_point=num_point, test_scene=test_scene, block_size=block_size, sample_rate=sample_rate, transform=None)
     print('point data size:', point_data.__len__())
     print('point data 0 shape:', point_data.__getitem__(0)[0].shape)
     print('point label 0 shape:', point_data.__getitem__(0)[1].shape)

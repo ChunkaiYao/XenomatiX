@@ -42,7 +42,7 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
 
         points = np.loadtxt(f)
         labels = np.ones((points.shape[0],1)) * g_class2label[cls]
-        points_list.append(np.concatenate([points, labels], 1)) # Nx7
+        points_list.append(np.concatenate([points, labels], 1)) # Nx5
     
     data_label = np.concatenate(points_list, 0)
     xyz_min = np.amin(data_label, axis=0)[0:3]
@@ -56,45 +56,36 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
                            data_label[i,3], data_label[i,4]))
         fout.close()
     elif file_format=='numpy':
+        print("checkpoint", out_filename, data_label)
         np.save(out_filename, data_label)
     else:
         print('ERROR!! Unknown file format: %s, please use txt or numpy.' % \
             (file_format))
         exit()
 
-def data_to_obj(data,name='example.obj',no_wall=True):
+def data_to_obj(data,name='example.obj'):
     fout = open(name, 'w')
-    label = data[:, -1].astype(int)
+    # label = data[:, -1].astype(int)
     for i in range(data.shape[0]):
-        if no_wall and ((label[i] == 2) or (label[i]==0)):
-            continue
-        fout.write('v %f %f %f %d %d %d\n' % \
-                   (data[i, 0], data[i, 1], data[i, 2], data[i, 3], data[i, 4], data[i, 5]))
+        fout.write('v %f %f %f %f\n' % \
+                   (data[i, 0], data[i, 1], data[i, 2], data[i, 3]))
     fout.close()
 
-def point_label_to_obj(input_filename, out_filename, label_color=True, easy_view=False, no_wall=False):
-    """ For visualization of a room from data_label file,
-	input_filename: each line is X Y Z R G B L
+def point_label_to_obj(input_filename, out_filename):
+    """ For visualization of a frame from data_label file,
+	input_filename: each line is X Y Z I L
 	out_filename: OBJ filename,
             visualize input file by coloring point with label color
         easy_view: only visualize furnitures and floor
     """
     data_label = np.loadtxt(input_filename)
-    data = data_label[:, 0:6]
+    data = data_label[:, 0:4]
     label = data_label[:, -1].astype(int)
     fout = open(out_filename, 'w')
     for i in range(data.shape[0]):
         color = g_label2color[label[i]]
-        if easy_view and (label[i] not in g_easy_view_labels):
-            continue
-        if no_wall and ((label[i] == 2) or (label[i]==0)):
-            continue
-        if label_color:
-            fout.write('v %f %f %f %d %d %d\n' % \
-                (data[i,0], data[i,1], data[i,2], color[0], color[1], color[2]))
-        else:
-            fout.write('v %f %f %f %d %d %d\n' % \
-                (data[i,0], data[i,1], data[i,2], data[i,3], data[i,4], data[i,5]))
+        fout.write('v %f %f %f %d %d %d\n' % \
+            (data[i,0], data[i,1], data[i,2], color[0], color[1], color[2]))
     fout.close()
  
 
@@ -129,10 +120,10 @@ def room2blocks(data, label, num_point, block_size=1.0, stride=1.0,
                 random_sample=False, sample_num=None, sample_aug=1):
     """ Prepare block training data.
     Args:
-        data: N x 6 numpy array, 012 are XYZ in meters, 345 are RGB in [0,1]
+        data: N x 4 numpy array, 012 are XYZ in meters, 3 are Intensity in
             assumes the data is shifted (min point is origin) and aligned
             (aligned with XYZ axis)
-        label: N size uint8 numpy array from 0-12
+        label: N size uint8 numpy array from 0-1
         num_point: int, how many points to sample in each block
         block_size: float, physical size of the block in meters
         stride: float, stride for block sweeping
@@ -141,7 +132,7 @@ def room2blocks(data, label, num_point, block_size=1.0, stride=1.0,
             [default: room area]
         sample_aug: if random sample, how much aug
     Returns:
-        block_datas: K x num_point x 6 np array of XYZRGB, RGB is in [0,1]
+        block_datas: K x num_point x 4 np array of XYZI, intensity is in TODO[?,?]
         block_labels: K x num_point x 1 np array of uint8 labels
         
     TODO: for this version, blocking is in fixed, non-overlapping pattern.

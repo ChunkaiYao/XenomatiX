@@ -18,8 +18,8 @@ for anno_path in anno_paths:
     print(anno_path)
     try:
         elements = anno_path.split('/')
-        out_filename = elements[-3]+'_'+elements[-2]+'.npy' # Scene_1_pedestrian_1.npy
-        collect_point_label(anno_path, os.path.join(output_folder, out_filename), 'txt')
+        out_filename = elements[-3]+'_'+elements[-2]+'.npy' # Scene_1_frame_1.npy
+        collect_point_label(anno_path, os.path.join(output_folder, out_filename), 'numpy')
         # print(out_filename)
     except:
         print(anno_path, 'ERROR!!')
