@@ -35,7 +35,7 @@ def inplace_relu(m):
 
 def parse_args():
     parser = argparse.ArgumentParser('Model')
-    parser.add_argument('--model', type=str, default='pointnet_sem_seg', help='model name [default: pointnet_sem_seg]')
+    parser.add_argument('--model', type=str, default='pointnet2_sem_seg', help='model name [default: pointnet_sem_seg]')
     parser.add_argument('--batch_size', type=int, default=16, help='Batch Size during training [default: 16]')
     parser.add_argument('--epoch', default=3, type=int, help='Epoch to run [default: 32]')
     parser.add_argument('--learning_rate', default=0.001, type=float, help='Initial learning rate [default: 0.001]')
