@@ -26,8 +26,21 @@ def convert(im_fd: str, pc_fd: str, out_fd: str):
     model = ObjectDetctor()
     im_fd_prefix = im_fd + IM_PREFIX
     pc_fd_prefix = pc_fd + PC_PREFIX
+    frame_list = get_frame_ids(im_fd, pc_fd)
+    i = 0
+    total_frames = len(frame_list)
 
-    for frame_id in sorted(get_frame_ids(im_fd, pc_fd)):
+    # down sample
+    sample_ratio = 20
+
+    for frame_id in sorted(frame_list):
+        if i % sample_ratio != 5:
+            i += 1
+            continue
+
+        print(i, " / ", total_frames)
+        i += 1
+
         # Run 2D detection model to obtain all bbox in current frame
         im_arr = mat_to_im(im_fd_prefix + frame_id + ".mat")
         model.inference(im_arr)
@@ -78,7 +91,7 @@ def convert(im_fd: str, pc_fd: str, out_fd: str):
             # print(len(ped_seg_pcs))
             # output ped pc to annotation file
             anno_path = out_fd + frame_name + "/Annotations"
-            if len(ped_seg_pcs) > 0:
+            if len(ped_seg_pcs) > 100:
                 with open(anno_path + "/pedestrian_" + str(seg_counter) + ".txt", "w") as f:
                     writer = csv.writer(f, delimiter=" ")
                     writer.writerows(ped_seg_pcs)
