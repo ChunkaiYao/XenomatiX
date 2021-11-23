@@ -176,12 +176,7 @@ def main(args):
         total_seen = 0
         loss_sum = 0
         classifier = classifier.train()
-        # print("----------------------Checkpoint-----------------")
-        # print(len(trainDataLoader))
-        # pdb.set_trace()
         for i, (points, target) in tqdm(enumerate(trainDataLoader), total=len(trainDataLoader), smoothing=0.9):
-            # print("----------------------Checkpoint-----------------")
-            # print(i)
             optimizer.zero_grad()
 
             points = points.data.numpy()

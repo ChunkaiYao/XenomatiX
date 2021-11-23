@@ -18,21 +18,21 @@ class S3DISDataset(Dataset):
         else:
             frames_split = [frame for frame in frames if 'Scene_{}'.format(test_scene) in frame]
 
-        self.room_points, self.room_labels = [], []
-        self.room_coord_min, self.room_coord_max = [], []
+        self.frame_points, self.frame_labels = [], []
+        self.frame_coord_min, self.frame_coord_max = [], []
         num_point_all = []
         labelweights = np.zeros(2)
 
-        for room_name in tqdm(frames_split, total=len(frames_split)):
-            room_path = os.path.join(data_root, room_name)
-            print(room_path)
-            room_data = np.load(room_path)  # xyzil, N*5
-            points, labels = room_data[:, 0:4], room_data[:, 4]  # xyzi, N*4; l, N
+        for frame_name in tqdm(frames_split, total=len(frames_split)):
+            frame_path = os.path.join(data_root, frame_name)
+            print(frame_path)
+            frame_data = np.load(frame_path)  # xyzil, N*5
+            points, labels = frame_data[:, 0:4], frame_data[:, 4]  # xyzi, N*4; l, N
             tmp, _ = np.histogram(labels, range(2))
             labelweights += tmp
             coord_min, coord_max = np.amin(points, axis=0)[:3], np.amax(points, axis=0)[:3]
-            self.room_points.append(points), self.room_labels.append(labels)
-            self.room_coord_min.append(coord_min), self.room_coord_max.append(coord_max)
+            self.frame_points.append(points), self.frame_labels.append(labels)
+            self.frame_coord_min.append(coord_min), self.frame_coord_max.append(coord_max)
             num_point_all.append(labels.size)
         labelweights = labelweights.astype(np.float32)
         labelweights = labelweights / np.sum(labelweights)
@@ -40,16 +40,16 @@ class S3DISDataset(Dataset):
         print(self.labelweights)
         sample_prob = num_point_all / np.sum(num_point_all)
         num_iter = int(np.sum(num_point_all) * sample_rate / num_point)
-        room_idxs = []
+        frame_idxs = []
         for index in range(len(frames_split)):
-            room_idxs.extend([index] * int(round(sample_prob[index] * num_iter)))
-        self.room_idxs = np.array(room_idxs)
-        print("Totally {} samples in {} set.".format(len(self.room_idxs), split))
+            frame_idxs.extend([index] * int(round(sample_prob[index] * num_iter)))
+        self.frame_idxs = np.array(frame_idxs)
+        print("Totally {} samples in {} set.".format(len(self.frame_idxs), split))
 
     def __getitem__(self, idx):
-        room_idx = self.room_idxs[idx]
-        points = self.room_points[room_idx]   # N * 6
-        labels = self.room_labels[room_idx]   # N
+        frame_idx = self.frame_idxs[idx]
+        points = self.frame_points[frame_idx]   # N * 6
+        labels = self.frame_labels[frame_idx]   # N
         N_points = points.shape[0]
 
         while (True):
@@ -68,9 +68,9 @@ class S3DISDataset(Dataset):
         # normalize
         selected_points = points[selected_point_idxs, :]  # num_point * 4
         current_points = np.zeros((self.num_point, 7))  # num_point * 7
-        current_points[:, 4] = selected_points[:, 0] / self.room_coord_max[room_idx][0]
-        current_points[:, 5] = selected_points[:, 1] / self.room_coord_max[room_idx][1]
-        current_points[:, 6] = selected_points[:, 2] / self.room_coord_max[room_idx][2]
+        current_points[:, 4] = selected_points[:, 0] / self.frame_coord_max[frame_idx][0]
+        current_points[:, 5] = selected_points[:, 1] / self.frame_coord_max[frame_idx][1]
+        current_points[:, 6] = selected_points[:, 2] / self.frame_coord_max[frame_idx][2]
         selected_points[:, 0] = selected_points[:, 0] - center[0]
         selected_points[:, 1] = selected_points[:, 1] - center[1]
         # selected_points[:, 3:6] /= 255.0
@@ -81,7 +81,7 @@ class S3DISDataset(Dataset):
         return current_points, current_labels
 
     def __len__(self):
-        return len(self.room_idxs)
+        return len(self.frame_idxs)
 
 class ScannetDatasetWholeScene():
     # prepare to give prediction on each points
@@ -100,7 +100,7 @@ class ScannetDatasetWholeScene():
             self.file_list = [d for d in os.listdir(root) if d.find('Scene_%d' % test_scene) != -1]
         self.scene_points_list = []
         self.semantic_labels_list = []
-        self.room_coord_min, self.room_coord_max = [], []
+        self.frame_coord_min, self.frame_coord_max = [], []
         for file in self.file_list:
             print(root, file)
             data = np.load(root + '/' + file)
@@ -108,7 +108,7 @@ class ScannetDatasetWholeScene():
             self.scene_points_list.append(data[:, :4])
             self.semantic_labels_list.append(data[:, 4])
             coord_min, coord_max = np.amin(points, axis=0)[:3], np.amax(points, axis=0)[:3]
-            self.room_coord_min.append(coord_min), self.room_coord_max.append(coord_max)
+            self.frame_coord_min.append(coord_min), self.frame_coord_max.append(coord_max)
         assert len(self.scene_points_list) == len(self.semantic_labels_list)
 
         labelweights = np.zeros(13)
@@ -127,7 +127,7 @@ class ScannetDatasetWholeScene():
         coord_min, coord_max = np.amin(points, axis=0)[:3], np.amax(points, axis=0)[:3]
         grid_x = int(np.ceil(float(coord_max[0] - coord_min[0] - self.block_size) / self.stride) + 1)
         grid_y = int(np.ceil(float(coord_max[1] - coord_min[1] - self.block_size) / self.stride) + 1)
-        data_room, label_room, sample_weight, index_room = np.array([]), np.array([]), np.array([]),  np.array([])
+        data_frame, label_frame, sample_weight, index_frame = np.array([]), np.array([]), np.array([]),  np.array([])
         for index_y in range(0, grid_y):
             for index_x in range(0, grid_x):
                 s_x = coord_min[0] + index_x * self.stride
@@ -159,15 +159,15 @@ class ScannetDatasetWholeScene():
                 label_batch = labels[point_idxs].astype(int)
                 batch_weight = self.labelweights[label_batch]
 
-                data_room = np.vstack([data_room, data_batch]) if data_room.size else data_batch
-                label_room = np.hstack([label_room, label_batch]) if label_room.size else label_batch
-                sample_weight = np.hstack([sample_weight, batch_weight]) if label_room.size else batch_weight
-                index_room = np.hstack([index_room, point_idxs]) if index_room.size else point_idxs
-        data_room = data_room.reshape((-1, self.block_points, data_room.shape[1]))
-        label_room = label_room.reshape((-1, self.block_points))
+                data_frame = np.vstack([data_frame, data_batch]) if data_frame.size else data_batch
+                label_frame = np.hstack([label_frame, label_batch]) if label_frame.size else label_batch
+                sample_weight = np.hstack([sample_weight, batch_weight]) if label_frame.size else batch_weight
+                index_frame = np.hstack([index_frame, point_idxs]) if index_frame.size else point_idxs
+        data_frame = data_frame.reshape((-1, self.block_points, data_frame.shape[1]))
+        label_frame = label_frame.reshape((-1, self.block_points))
         sample_weight = sample_weight.reshape((-1, self.block_points))
-        index_room = index_room.reshape((-1, self.block_points))
-        return data_room, label_room, sample_weight, index_room
+        index_frame = index_frame.reshape((-1, self.block_points))
+        return data_frame, label_frame, sample_weight, index_frame
 
     def __len__(self):
         return len(self.scene_points_list)
