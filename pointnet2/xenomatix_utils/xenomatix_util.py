@@ -64,7 +64,7 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
     # data_label2 = data_label2[idx,:]
     print("checking", data_label2.shape)
 
-    data_label1 = np.repeat(data_label1, (data_label2.shape[0] / 2) // data_label1.shape[0], 0)
+    data_label1 = np.repeat(data_label1, (data_label2.shape[0]) // data_label1.shape[0], 0)
     print("checking", data_label1.shape)
     
     if file_format=='txt':

@@ -173,8 +173,11 @@ class ScannetDatasetWholeScene():
         return len(self.scene_points_list)
 
 if __name__ == '__main__':
-    data_root = '/home/test/Pointnet_Pointnet2_pytorch/pointnet2/sample/output'
+    # data_root = '/home/test/Pointnet_Pointnet2_pytorch/pointnet2/sample/output'
     # data_root = '/home/zhukeyue/Documents/XenomatiX/sample/output'
+    data_root = os.getcwd()
+    data_root = os.path.abspath(os.path.join(data_root, os.pardir))
+    data_root = os.path.join(data_root, 'sample', 'output')
     num_point, test_scene, block_size, sample_rate = 4096, 3, 10000.0, 1
 
     point_data = S3DISDataset(split='test', data_root=data_root, num_point=num_point, test_scene=test_scene, block_size=block_size, sample_rate=sample_rate, transform=None)
