@@ -116,3 +116,7 @@ dmypy.json
 /data
 /sample
 /log
+
+*.png
+*.mat
+*.jpg

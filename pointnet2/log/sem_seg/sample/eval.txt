@@ -1,0 +1,32 @@
+2021-11-11 21:24:00,760 - Model - INFO - PARAMETER ...
+2021-11-11 21:24:00,760 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:26:44,759 - Model - INFO - PARAMETER ...
+2021-11-11 21:26:44,759 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:28:53,405 - Model - INFO - PARAMETER ...
+2021-11-11 21:28:53,405 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:29:40,702 - Model - INFO - PARAMETER ...
+2021-11-11 21:29:40,702 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:30:01,444 - Model - INFO - PARAMETER ...
+2021-11-11 21:30:01,444 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:32:28,456 - Model - INFO - PARAMETER ...
+2021-11-11 21:32:28,456 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:32:28,773 - Model - INFO - The number of test data is: 3
+2021-11-11 21:32:29,869 - Model - INFO - ---- EVALUATION WHOLE SCENE----
+2021-11-11 21:54:23,048 - Model - INFO - PARAMETER ...
+2021-11-11 21:54:23,048 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:54:23,359 - Model - INFO - The number of test data is: 3
+2021-11-11 21:54:24,453 - Model - INFO - ---- EVALUATION WHOLE SCENE----
+2021-11-11 21:54:59,896 - Model - INFO - PARAMETER ...
+2021-11-11 21:54:59,896 - Model - INFO - Namespace(batch_size=32, gpu='0', log_dir='sample', num_point=4096, num_votes=3, test_scene=1, visual=True)
+2021-11-11 21:55:00,210 - Model - INFO - The number of test data is: 3
+2021-11-11 21:55:01,299 - Model - INFO - ---- EVALUATION WHOLE SCENE----
+2021-11-11 21:55:41,920 - Model - INFO - Mean IoU of Scene_1_frame_1: 0.3131
+2021-11-11 21:57:13,775 - Model - INFO - Mean IoU of Scene_1_frame_2: 0.4527
+2021-11-11 21:58:22,791 - Model - INFO - Mean IoU of Scene_1_frame_3: 0.3600
+2021-11-11 21:58:27,110 - Model - INFO - ------- IoU --------
+class background    , IoU: 0.397 
+class pedestrian    , IoU: 0.390 
+
+2021-11-11 21:58:27,110 - Model - INFO - eval point avg class IoU: 0.393713
+2021-11-11 21:58:27,111 - Model - INFO - eval whole scene point avg class acc: 0.617969
+2021-11-11 21:58:27,111 - Model - INFO - eval whole scene point accuracy: 0.565003

@@ -1,0 +1,167 @@
+2021-11-11 20:57:56,534 - Model - INFO - PARAMETER ...
+2021-11-11 20:57:56,534 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 20:59:43,304 - Model - INFO - PARAMETER ...
+2021-11-11 20:59:43,304 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 21:08:32,501 - Model - INFO - PARAMETER ...
+2021-11-11 21:08:32,501 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 21:21:38,998 - Model - INFO - PARAMETER ...
+2021-11-11 21:21:38,998 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 21:21:40,969 - Model - INFO - The number of training data is: 546
+2021-11-11 21:21:40,969 - Model - INFO - The number of test data is: 1093
+2021-11-11 21:21:40,999 - Model - INFO - No existing model, starting training from scratch...
+2021-11-11 21:21:41,000 - Model - INFO - **** Epoch 1 (1/3) ****
+2021-11-11 21:21:41,000 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:21:45,623 - Model - INFO - Training mean loss: 0.619038
+2021-11-11 21:21:45,623 - Model - INFO - Training accuracy: 0.732431
+2021-11-11 21:21:45,623 - Model - INFO - Save model...
+2021-11-11 21:21:45,623 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/model.pth
+2021-11-11 21:21:45,684 - Model - INFO - Saving model....
+2021-11-11 21:21:45,686 - Model - INFO - ---- EPOCH 001 EVALUATION ----
+2021-11-11 21:21:51,315 - Model - INFO - eval mean loss: 0.802328
+2021-11-11 21:21:51,315 - Model - INFO - eval point avg class IoU: 0.446276
+2021-11-11 21:21:51,315 - Model - INFO - eval point accuracy: 0.652725
+2021-11-11 21:21:51,315 - Model - INFO - eval point avg class acc: 0.600657
+2021-11-11 21:21:51,315 - Model - INFO - ------- IoU --------
+class background     weight: 0.348, IoU: 0.592 
+class pedestrian     weight: 0.652, IoU: 0.301 
+
+2021-11-11 21:21:51,315 - Model - INFO - Eval mean loss: 0.802328
+2021-11-11 21:21:51,315 - Model - INFO - Eval accuracy: 0.652725
+2021-11-11 21:21:51,315 - Model - INFO - Save model...
+2021-11-11 21:21:51,315 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:21:51,371 - Model - INFO - Saving model....
+2021-11-11 21:21:51,371 - Model - INFO - Best mIoU: 0.446276
+2021-11-11 21:21:51,371 - Model - INFO - **** Epoch 2 (2/3) ****
+2021-11-11 21:21:51,371 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:21:55,462 - Model - INFO - Training mean loss: 0.528545
+2021-11-11 21:21:55,462 - Model - INFO - Training accuracy: 0.783161
+2021-11-11 21:21:55,465 - Model - INFO - ---- EPOCH 002 EVALUATION ----
+2021-11-11 21:22:01,066 - Model - INFO - eval mean loss: 0.739340
+2021-11-11 21:22:01,066 - Model - INFO - eval point avg class IoU: 0.461837
+2021-11-11 21:22:01,066 - Model - INFO - eval point accuracy: 0.699813
+2021-11-11 21:22:01,066 - Model - INFO - eval point avg class acc: 0.612831
+2021-11-11 21:22:01,066 - Model - INFO - ------- IoU --------
+class background     weight: 0.367, IoU: 0.665 
+class pedestrian     weight: 0.633, IoU: 0.259 
+
+2021-11-11 21:22:01,066 - Model - INFO - Eval mean loss: 0.739340
+2021-11-11 21:22:01,066 - Model - INFO - Eval accuracy: 0.699813
+2021-11-11 21:22:01,066 - Model - INFO - Save model...
+2021-11-11 21:22:01,066 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:22:01,137 - Model - INFO - Saving model....
+2021-11-11 21:22:01,138 - Model - INFO - Best mIoU: 0.461837
+2021-11-11 21:22:01,138 - Model - INFO - **** Epoch 3 (3/3) ****
+2021-11-11 21:22:01,138 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:22:05,194 - Model - INFO - Training mean loss: 0.487951
+2021-11-11 21:22:05,194 - Model - INFO - Training accuracy: 0.805023
+2021-11-11 21:22:05,196 - Model - INFO - ---- EPOCH 003 EVALUATION ----
+2021-11-11 21:22:10,563 - Model - INFO - eval mean loss: 0.653525
+2021-11-11 21:22:10,563 - Model - INFO - eval point avg class IoU: 0.473479
+2021-11-11 21:22:10,563 - Model - INFO - eval point accuracy: 0.717257
+2021-11-11 21:22:10,563 - Model - INFO - eval point avg class acc: 0.617701
+2021-11-11 21:22:10,564 - Model - INFO - ------- IoU --------
+class background     weight: 0.350, IoU: 0.686 
+class pedestrian     weight: 0.650, IoU: 0.261 
+
+2021-11-11 21:22:10,564 - Model - INFO - Eval mean loss: 0.653525
+2021-11-11 21:22:10,564 - Model - INFO - Eval accuracy: 0.717257
+2021-11-11 21:22:10,564 - Model - INFO - Save model...
+2021-11-11 21:22:10,564 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:22:10,638 - Model - INFO - Saving model....
+2021-11-11 21:22:10,638 - Model - INFO - Best mIoU: 0.473479
+2021-11-11 21:50:28,523 - Model - INFO - PARAMETER ...
+2021-11-11 21:50:28,523 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 21:50:30,048 - Model - INFO - The number of training data is: 546
+2021-11-11 21:50:30,048 - Model - INFO - The number of test data is: 1093
+2021-11-11 21:50:30,101 - Model - INFO - Use pretrain model
+2021-11-11 21:50:30,102 - Model - INFO - **** Epoch 1 (3/3) ****
+2021-11-11 21:50:30,102 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:53:44,216 - Model - INFO - PARAMETER ...
+2021-11-11 21:53:44,216 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-11 21:53:45,734 - Model - INFO - The number of training data is: 546
+2021-11-11 21:53:45,735 - Model - INFO - The number of test data is: 1093
+2021-11-11 21:53:45,792 - Model - INFO - No existing model, starting training from scratch...
+2021-11-11 21:53:45,793 - Model - INFO - **** Epoch 1 (1/3) ****
+2021-11-11 21:53:45,793 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:53:50,233 - Model - INFO - Training mean loss: 0.580795
+2021-11-11 21:53:50,233 - Model - INFO - Training accuracy: 0.754777
+2021-11-11 21:53:50,233 - Model - INFO - Save model...
+2021-11-11 21:53:50,233 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/model.pth
+2021-11-11 21:53:50,304 - Model - INFO - Saving model....
+2021-11-11 21:53:50,306 - Model - INFO - ---- EPOCH 001 EVALUATION ----
+2021-11-11 21:53:55,653 - Model - INFO - eval mean loss: 0.810628
+2021-11-11 21:53:55,653 - Model - INFO - eval point avg class IoU: 0.398839
+2021-11-11 21:53:55,653 - Model - INFO - eval point accuracy: 0.702190
+2021-11-11 21:53:55,653 - Model - INFO - eval point avg class acc: 0.549166
+2021-11-11 21:53:55,653 - Model - INFO - ------- IoU --------
+class background     weight: 0.326, IoU: 0.691 
+class pedestrian     weight: 0.674, IoU: 0.106 
+
+2021-11-11 21:53:55,653 - Model - INFO - Eval mean loss: 0.810628
+2021-11-11 21:53:55,653 - Model - INFO - Eval accuracy: 0.702190
+2021-11-11 21:53:55,654 - Model - INFO - Save model...
+2021-11-11 21:53:55,654 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:53:55,735 - Model - INFO - Saving model....
+2021-11-11 21:53:55,735 - Model - INFO - Best mIoU: 0.398839
+2021-11-11 21:53:55,735 - Model - INFO - **** Epoch 2 (2/3) ****
+2021-11-11 21:53:55,735 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:53:59,868 - Model - INFO - Training mean loss: 0.512674
+2021-11-11 21:53:59,869 - Model - INFO - Training accuracy: 0.786370
+2021-11-11 21:53:59,871 - Model - INFO - ---- EPOCH 002 EVALUATION ----
+2021-11-11 21:54:05,293 - Model - INFO - eval mean loss: 0.638808
+2021-11-11 21:54:05,293 - Model - INFO - eval point avg class IoU: 0.530565
+2021-11-11 21:54:05,293 - Model - INFO - eval point accuracy: 0.735836
+2021-11-11 21:54:05,293 - Model - INFO - eval point avg class acc: 0.673077
+2021-11-11 21:54:05,293 - Model - INFO - ------- IoU --------
+class background     weight: 0.374, IoU: 0.686 
+class pedestrian     weight: 0.626, IoU: 0.375 
+
+2021-11-11 21:54:05,293 - Model - INFO - Eval mean loss: 0.638808
+2021-11-11 21:54:05,293 - Model - INFO - Eval accuracy: 0.735836
+2021-11-11 21:54:05,294 - Model - INFO - Save model...
+2021-11-11 21:54:05,294 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:54:05,370 - Model - INFO - Saving model....
+2021-11-11 21:54:05,370 - Model - INFO - Best mIoU: 0.530565
+2021-11-11 21:54:05,370 - Model - INFO - **** Epoch 3 (3/3) ****
+2021-11-11 21:54:05,370 - Model - INFO - Learning rate:0.001000
+2021-11-11 21:54:09,446 - Model - INFO - Training mean loss: 0.487983
+2021-11-11 21:54:09,446 - Model - INFO - Training accuracy: 0.803505
+2021-11-11 21:54:09,448 - Model - INFO - ---- EPOCH 003 EVALUATION ----
+2021-11-11 21:54:14,583 - Model - INFO - eval mean loss: 0.597102
+2021-11-11 21:54:14,583 - Model - INFO - eval point avg class IoU: 0.558806
+2021-11-11 21:54:14,583 - Model - INFO - eval point accuracy: 0.745289
+2021-11-11 21:54:14,583 - Model - INFO - eval point avg class acc: 0.703561
+2021-11-11 21:54:14,583 - Model - INFO - ------- IoU --------
+class background     weight: 0.342, IoU: 0.683 
+class pedestrian     weight: 0.658, IoU: 0.434 
+
+2021-11-11 21:54:14,583 - Model - INFO - Eval mean loss: 0.597102
+2021-11-11 21:54:14,583 - Model - INFO - Eval accuracy: 0.745289
+2021-11-11 21:54:14,583 - Model - INFO - Save model...
+2021-11-11 21:54:14,583 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-11 21:54:14,659 - Model - INFO - Saving model....
+2021-11-11 21:54:14,659 - Model - INFO - Best mIoU: 0.558806
+2021-11-16 22:28:37,660 - Model - INFO - PARAMETER ...
+2021-11-16 22:28:37,660 - Model - INFO - Namespace(batch_size=16, decay_rate=0.0001, epoch=3, gpu='0', learning_rate=0.001, log_dir='sample', lr_decay=0.7, model='pointnet_sem_seg', npoint=4096, optimizer='Adam', step_size=10, test_scene=1)
+2021-11-16 22:28:39,660 - Model - INFO - The number of training data is: 546
+2021-11-16 22:28:39,660 - Model - INFO - The number of test data is: 1093
+2021-11-16 22:28:39,732 - Model - INFO - Use pretrain model
+2021-11-16 22:28:39,733 - Model - INFO - **** Epoch 1 (3/3) ****
+2021-11-16 22:28:39,733 - Model - INFO - Learning rate:0.001000
+2021-11-16 22:28:44,274 - Model - INFO - Training mean loss: 0.501463
+2021-11-16 22:28:44,274 - Model - INFO - Training accuracy: 0.804498
+2021-11-16 22:28:44,277 - Model - INFO - ---- EPOCH 001 EVALUATION ----
+2021-11-16 22:28:49,770 - Model - INFO - eval mean loss: 0.577641
+2021-11-16 22:28:49,770 - Model - INFO - eval point avg class IoU: 0.431927
+2021-11-16 22:28:49,770 - Model - INFO - eval point accuracy: 0.686335
+2021-11-16 22:28:49,770 - Model - INFO - eval point avg class acc: 0.593281
+2021-11-16 22:28:49,770 - Model - INFO - ------- IoU --------
+class background     weight: 0.377, IoU: 0.659 
+class pedestrian     weight: 0.623, IoU: 0.205 
+
+2021-11-16 22:28:49,770 - Model - INFO - Eval mean loss: 0.577641
+2021-11-16 22:28:49,770 - Model - INFO - Eval accuracy: 0.686335
+2021-11-16 22:28:49,770 - Model - INFO - Save model...
+2021-11-16 22:28:49,770 - Model - INFO - Saving at log/sem_seg/sample/checkpoints/best_model.pth
+2021-11-16 22:28:49,847 - Model - INFO - Saving model....
+2021-11-16 22:28:49,847 - Model - INFO - Best mIoU: 0.431927
