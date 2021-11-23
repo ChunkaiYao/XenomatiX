@@ -34,6 +34,8 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
         the points are shifted before save, the most negative point is now at origin.
     """
     points_list = []
+    pedestrian_list = []
+    background_list = []
     for f in glob.glob(os.path.join(anno_path, '*.txt')):
         cls = os.path.basename(f).split('_')[0]
         print(f)
@@ -42,11 +44,28 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
 
         points = np.loadtxt(f)
         labels = np.ones((points.shape[0],1)) * g_class2label[cls]
-        points_list.append(np.concatenate([points, labels], 1)) # Nx5
-    
+        if cls == "pedestrian":
+            points_list.append(np.concatenate([points, labels], 1))
+            pedestrian_list.append(np.concatenate([points, labels], 1)) # Nx5
+        else:
+            points_list.append(np.concatenate([points, labels], 1))
+            background_list.append(np.concatenate([points, labels], 1)) # Nx5
     data_label = np.concatenate(points_list, 0)
     xyz_min = np.amin(data_label, axis=0)[0:3]
-    data_label[:, 0:3] -= xyz_min
+    # print("checking", data_label.shape)
+    data_label1 = np.concatenate(pedestrian_list, 0)
+    data_label1[:, 0:3] -= xyz_min
+    print("checking", data_label1.shape)
+
+    data_label2 = np.concatenate(background_list, 0)
+    data_label2[:, 0:3] -= xyz_min
+    # print(data_label1.shape[0],data_label1.shape[1])
+    # idx = np.random.randint(data_label2.shape[0], size=data_label1.shape[0]*2)
+    # data_label2 = data_label2[idx,:]
+    print("checking", data_label2.shape)
+
+    data_label1 = np.repeat(data_label1, (data_label2.shape[0] / 2) // data_label1.shape[0], 0)
+    print("checking", data_label1.shape)
     
     if file_format=='txt':
         fout = open(out_filename, 'w')
@@ -56,8 +75,11 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
                            data_label[i,3], data_label[i,4]))
         fout.close()
     elif file_format=='numpy':
-        print("checkpoint", out_filename, data_label)
-        np.save(out_filename, data_label)
+        if pedestrian_list:
+        # print("checkpoint", out_filename, data_label)
+            np.save(out_filename+".npy", np.concatenate((data_label1, data_label2), 0))
+        #     np.save(out_filename+"_pedestrian.npy", data_label1)
+        # np.save(out_filename+"_background.npy", data_label2)
     else:
         print('ERROR!! Unknown file format: %s, please use txt or numpy.' % \
             (file_format))

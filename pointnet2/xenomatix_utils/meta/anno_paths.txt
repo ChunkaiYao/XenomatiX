@@ -258,7 +258,8 @@ Scene_2/frame_00018811/Annotations
 Scene_2/frame_00019249/Annotations
 Scene_2/frame_00019622/Annotations
 Scene_2/frame_00016155/Annotations
-Scene_3/frame_00017901/Annotations
+Scene_3/frame_00015377/Annotations
+Scene_3/frame_00018186/Annotations
 Scene_1/frame_00010266/Annotations
 Scene_1/frame_00004672/Annotations
 Scene_1/frame_00010003/Annotations

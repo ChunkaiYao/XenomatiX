@@ -1,6 +1,6 @@
 import os
 file = open("anno_paths.txt", "a")
-path = os.getcwd()
+path = "/home/test/Pointnet_Pointnet2_pytorch/pointnet2/sample/data"
 for f in os.listdir(path):
     sub = os.path.join(path, f)
     cnt = 0
