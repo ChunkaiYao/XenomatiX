@@ -113,6 +113,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# /pointnet2/data
+# /pointnet2/sample
+# /pointnet2/log
+
 /data
 /sample
 /log
