@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 
 
 class S3DISDataset(Dataset):
-    def __init__(self, split='train', data_root='trainval_fullarea', num_point=4096, test_scene=5, block_size=1.0, sample_rate=1.0, transform=None):
+    def __init__(self, split='train', data_root='trainval_fullarea', num_point=4096, test_scene=1, block_size=1.0, sample_rate=1.0, transform=None):
         super().__init__()
         self.num_point = num_point
         self.block_size = block_size
@@ -57,7 +57,7 @@ class S3DISDataset(Dataset):
             block_min = center - [self.block_size / 2.0, self.block_size / 2.0, 0]
             block_max = center + [self.block_size / 2.0, self.block_size / 2.0, 0]
             point_idxs = np.where((points[:, 0] >= block_min[0]) & (points[:, 0] <= block_max[0]) & (points[:, 1] >= block_min[1]) & (points[:, 1] <= block_max[1]))[0]
-            if point_idxs.size > 1024:
+            if point_idxs.size > 2048:
                 break
 
         if point_idxs.size >= self.num_point:
@@ -85,7 +85,7 @@ class S3DISDataset(Dataset):
 
 class ScannetDatasetWholeScene():
     # prepare to give prediction on each points
-    def __init__(self, root, block_points=4096, split='test', test_scene=5, stride=0.5, block_size=1.0, padding=0.001):
+    def __init__(self, root, block_points=4096, split='test', test_scene=3, stride=500, block_size=1000.0, padding=0.001):
         self.block_points = block_points
         self.block_size = block_size
         self.padding = padding
@@ -175,7 +175,7 @@ class ScannetDatasetWholeScene():
 if __name__ == '__main__':
     data_root = '/home/test/Pointnet_Pointnet2_pytorch/sample/output'
     # data_root = '/home/zhukeyue/Documents/XenomatiX/sample/output'
-    num_point, test_scene, block_size, sample_rate = 4096, 1, 1.0, 0.01
+    num_point, test_scene, block_size, sample_rate = 4096, 1, 1000.0, 0.01
 
     point_data = S3DISDataset(split='train', data_root=data_root, num_point=num_point, test_scene=test_scene, block_size=block_size, sample_rate=sample_rate, transform=None)
     print('point data size:', point_data.__len__())

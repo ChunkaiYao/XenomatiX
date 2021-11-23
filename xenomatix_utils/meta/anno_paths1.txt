@@ -1,0 +1,5 @@
+Scene_1/frame_1/Annotations
+Scene_1/frame_2/Annotations
+Scene_1/frame_3/Annotations
+Scene_2/frame_1/Annotations
+Scene_2/frame_2/Annotations
