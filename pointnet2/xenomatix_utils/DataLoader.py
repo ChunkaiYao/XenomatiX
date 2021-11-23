@@ -57,7 +57,7 @@ class S3DISDataset(Dataset):
             block_min = center - [self.block_size / 2.0, self.block_size / 2.0, 0]
             block_max = center + [self.block_size / 2.0, self.block_size / 2.0, 0]
             point_idxs = np.where((points[:, 0] >= block_min[0]) & (points[:, 0] <= block_max[0]) & (points[:, 1] >= block_min[1]) & (points[:, 1] <= block_max[1]))[0]
-            if point_idxs.size > 2048:
+            if point_idxs.size > 1024:
                 break
 
         if point_idxs.size >= self.num_point:
@@ -173,11 +173,11 @@ class ScannetDatasetWholeScene():
         return len(self.scene_points_list)
 
 if __name__ == '__main__':
-    data_root = '/home/test/Pointnet_Pointnet2_pytorch/sample/output'
+    data_root = '/home/test/Pointnet_Pointnet2_pytorch/pointnet2/sample/output'
     # data_root = '/home/zhukeyue/Documents/XenomatiX/sample/output'
-    num_point, test_scene, block_size, sample_rate = 4096, 1, 1000.0, 0.01
+    num_point, test_scene, block_size, sample_rate = 4096, 3, 10000.0, 1
 
-    point_data = S3DISDataset(split='train', data_root=data_root, num_point=num_point, test_scene=test_scene, block_size=block_size, sample_rate=sample_rate, transform=None)
+    point_data = S3DISDataset(split='test', data_root=data_root, num_point=num_point, test_scene=test_scene, block_size=block_size, sample_rate=sample_rate, transform=None)
     print('point data size:', point_data.__len__())
     print('point data 0 shape:', point_data.__getitem__(0)[0].shape)
     print('point label 0 shape:', point_data.__getitem__(0)[1].shape)
@@ -189,7 +189,7 @@ if __name__ == '__main__':
     torch.cuda.manual_seed_all(manual_seed)
     def worker_init_fn(worker_id):
         random.seed(manual_seed + worker_id)
-    train_loader = torch.utils.data.DataLoader(point_data, batch_size=16, shuffle=True, num_workers=16, pin_memory=True, worker_init_fn=worker_init_fn)
+    train_loader = torch.utils.data.DataLoader(point_data, batch_size=16, shuffle=True, num_workers=0, pin_memory=True, worker_init_fn=worker_init_fn)
     for idx in range(4):
         end = time.time()
         for i, (input, target) in enumerate(train_loader):
