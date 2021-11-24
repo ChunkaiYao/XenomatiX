@@ -48,7 +48,15 @@ def convert(im_fd: str, pc_fd: str, out_fd: str):
 
         # Load corresponding frame of pc data
         pcs = mat_to_pc(pc_fd_prefix + frame_id + ".mat")
-        pcs_background_set = set([row[0:4] for row in pcs])
+        pcs = np.array(pcs)
+        pcs[:,0:3] /= 1000
+        pcs[:,3] = (pcs[:,4] - np.min(pcs[:,4])) / (np.max(pcs[:,4]) - np.min(pcs[:,4]))
+        pcs = np.round(pcs, 3)
+        pcs = pcs.tolist()
+        pcs_background_set = set([(round(row[0], 3), round(row[1], 3), round(row[2], 3), round(row[3], 3)) for row in pcs])
+
+        # pcs_background_set = set([row[0:4] for row in pcs])
+        # print(pcs_background_set)
 
         # Create frame dir structure: out_fd/frame_i/Annotations, frame_i.txt
         frame_name = "/frame_" + frame_id
@@ -82,6 +90,7 @@ def convert(im_fd: str, pc_fd: str, out_fd: str):
             # filter out of range pcs
             ped_seg_pcs = []
             for pc in matched_pcs:
+                pc = tuple(pc)
                 if pc[0] > depth_median - 1000 and pc[0] < depth_median + 1000:
                     ped_seg_pcs.append(pc)
                     # remove ped pc from background pc set
