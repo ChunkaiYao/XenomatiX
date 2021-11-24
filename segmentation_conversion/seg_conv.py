@@ -31,7 +31,7 @@ def convert(im_fd: str, pc_fd: str, out_fd: str):
     total_frames = len(frame_list)
 
     # down sample
-    sample_ratio = 20
+    sample_ratio = 10
 
     for frame_id in sorted(frame_list):
         if i % sample_ratio != 5:
