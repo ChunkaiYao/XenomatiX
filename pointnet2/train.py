@@ -17,6 +17,7 @@ import provider
 import numpy as np
 import time
 import pdb
+import matplotlib.pyplot as plt
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = BASE_DIR
@@ -92,6 +93,9 @@ def main(args):
     NUM_CLASSES = 2
     NUM_POINT = args.npoint
     BATCH_SIZE = args.batch_size
+
+    training_loss = []
+    evaluation_loss = []
 
     print("start loading training data ...")
     TRAIN_DATASET = S3DISDataset(split='train', data_root=root, num_point=NUM_POINT, test_scene=args.test_scene, block_size=10000.0, sample_rate=1.0, transform=None)
@@ -202,6 +206,8 @@ def main(args):
         log_string('Training mean loss: %f' % (loss_sum / num_batches))
         log_string('Training accuracy: %f' % (total_correct / float(total_seen)))
 
+        training_loss.append(float(loss_sum / num_batches))
+
         if epoch % 5 == 0:
             logger.info('Save model...')
             savepath = str(checkpoints_dir) + '/model.pth'
@@ -268,8 +274,10 @@ def main(args):
                     total_correct_class[l] / float(total_iou_deno_class[l]))
 
             log_string(iou_per_class_str)
-            log_string('Eval mean loss: %f' % (loss_sum / num_batches))
-            log_string('Eval accuracy: %f' % (total_correct / float(total_seen)))
+            # log_string('Eval mean loss: %f' % (loss_sum / num_batches))
+            # log_string('Eval accuracy: %f' % (total_correct / float(total_seen)))
+
+            evaluation_loss.append(float(loss_sum / num_batches))
 
             if mIoU >= best_iou:
                 best_iou = mIoU
@@ -286,6 +294,12 @@ def main(args):
                 log_string('Saving model....')
             log_string('Best mIoU: %f' % best_iou)
         global_epoch += 1
+
+    epochs = [i+1 for i in range(start_epoch, args.epoch)]
+    plt.plot(epochs, training_loss, 'r.', epochs, evaluation_loss, 'g.')
+    plt.show()
+    # print(training_loss)
+    # print(evaluation_loss)
 
 
 if __name__ == '__main__':
