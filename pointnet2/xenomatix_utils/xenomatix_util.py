@@ -59,13 +59,17 @@ def collect_point_label(anno_path, out_filename, file_format='txt'):
 
     data_label2 = np.concatenate(background_list, 0)
     data_label2[:, 0:3] -= xyz_min
-    # print(data_label1.shape[0],data_label1.shape[1])
-    # idx = np.random.randint(data_label2.shape[0], size=data_label1.shape[0]*2)
-    # data_label2 = data_label2[idx,:]
-    print("checking", data_label2.shape)
 
-    data_label1 = np.repeat(data_label1, (data_label2.shape[0]) // data_label1.shape[0], 0)
+
+
+    data_label1 = np.repeat(data_label1, (data_label2.shape[0]*0.625) // data_label1.shape[0], 0)
     print("checking", data_label1.shape)
+
+
+    # idx = np.random.randint(data_label2.shape[0], size=int(data_label2.shape[0]*0.4))
+    # data_label2 = data_label2[idx,:]
+
+    print("checking", data_label2.shape)
     
     if file_format=='txt':
         fout = open(out_filename, 'w')
@@ -210,54 +214,54 @@ def room2blocks(data, label, num_point, block_size=1.0, stride=1.0,
            np.concatenate(block_label_list, 0)
 
 
-def room2blocks_plus(data_label, num_point, block_size, stride,
-                     random_sample, sample_num, sample_aug):
-    """ room2block with input filename and RGB preprocessing.
-    """
-    data = data_label[:,0:6]
-    data[:,3:6] /= 255.0
-    label = data_label[:,-1].astype(np.uint8)
+# def room2blocks_plus(data_label, num_point, block_size, stride,
+#                      random_sample, sample_num, sample_aug):
+#     """ room2block with input filename and RGB preprocessing.
+#     """
+#     data = data_label[:,0:6]
+#     data[:,3:6] /= 255.0
+#     label = data_label[:,-1].astype(np.uint8)
     
-    return room2blocks(data, label, num_point, block_size, stride,
-                       random_sample, sample_num, sample_aug)
+#     return room2blocks(data, label, num_point, block_size, stride,
+#                        random_sample, sample_num, sample_aug)
    
-def room2blocks_wrapper(data_label_filename, num_point, block_size=1.0, stride=1.0,
-                        random_sample=False, sample_num=None, sample_aug=1):
-    if data_label_filename[-3:] == 'txt':
-        data_label = np.loadtxt(data_label_filename)
-    elif data_label_filename[-3:] == 'npy':
-        data_label = np.load(data_label_filename)
-    else:
-        print('Unknown file type! exiting.')
-        exit()
-    return room2blocks_plus(data_label, num_point, block_size, stride,
-                            random_sample, sample_num, sample_aug)
+# def room2blocks_wrapper(data_label_filename, num_point, block_size=1.0, stride=1.0,
+#                         random_sample=False, sample_num=None, sample_aug=1):
+#     if data_label_filename[-3:] == 'txt':
+#         data_label = np.loadtxt(data_label_filename)
+#     elif data_label_filename[-3:] == 'npy':
+#         data_label = np.load(data_label_filename)
+#     else:
+#         print('Unknown file type! exiting.')
+#         exit()
+#     return room2blocks_plus(data_label, num_point, block_size, stride,
+#                             random_sample, sample_num, sample_aug)
 
-def room2blocks_plus_normalized(data_label, num_point, block_size, stride,
-                                random_sample, sample_num, sample_aug):
-    """ room2block, with input filename and RGB preprocessing.
-        for each block centralize XYZ, add normalized XYZ as 678 channels
-    """
-    data = data_label[:,0:6]
-    data[:,3:6] /= 255.0
-    label = data_label[:,-1].astype(np.uint8)
-    max_room_x = max(data[:,0])
-    max_room_y = max(data[:,1])
-    max_room_z = max(data[:,2])
+# def room2blocks_plus_normalized(data_label, num_point, block_size, stride,
+#                                 random_sample, sample_num, sample_aug):
+#     """ room2block, with input filename and RGB preprocessing.
+#         for each block centralize XYZ, add normalized XYZ as 678 channels
+#     """
+#     data = data_label[:,0:6]
+#     data[:,3:6] /= 255.0
+#     label = data_label[:,-1].astype(np.uint8)
+#     max_room_x = max(data[:,0])
+#     max_room_y = max(data[:,1])
+#     max_room_z = max(data[:,2])
     
-    data_batch, label_batch = room2blocks(data, label, num_point, block_size, stride,
-                                          random_sample, sample_num, sample_aug)
-    new_data_batch = np.zeros((data_batch.shape[0], num_point, 9))
-    for b in range(data_batch.shape[0]):
-        new_data_batch[b, :, 6] = data_batch[b, :, 0]/max_room_x
-        new_data_batch[b, :, 7] = data_batch[b, :, 1]/max_room_y
-        new_data_batch[b, :, 8] = data_batch[b, :, 2]/max_room_z
-        minx = min(data_batch[b, :, 0])
-        miny = min(data_batch[b, :, 1])
-        data_batch[b, :, 0] -= (minx+block_size/2)
-        data_batch[b, :, 1] -= (miny+block_size/2)
-    new_data_batch[:, :, 0:6] = data_batch
-    return new_data_batch, label_batch
+#     data_batch, label_batch = room2blocks(data, label, num_point, block_size, stride,
+#                                           random_sample, sample_num, sample_aug)
+#     new_data_batch = np.zeros((data_batch.shape[0], num_point, 9))
+#     for b in range(data_batch.shape[0]):
+#         new_data_batch[b, :, 6] = data_batch[b, :, 0]/max_room_x
+#         new_data_batch[b, :, 7] = data_batch[b, :, 1]/max_room_y
+#         new_data_batch[b, :, 8] = data_batch[b, :, 2]/max_room_z
+#         minx = min(data_batch[b, :, 0])
+#         miny = min(data_batch[b, :, 1])
+#         data_batch[b, :, 0] -= (minx+block_size/2)
+#         data_batch[b, :, 1] -= (miny+block_size/2)
+#     new_data_batch[:, :, 0:6] = data_batch
+#     return new_data_batch, label_batch
 
 
 def room2blocks_wrapper_normalized(data_label_filename, num_point, block_size=1.0, stride=1.0,
@@ -308,41 +312,41 @@ def room2samples(data, label, sample_num_point):
             sample_labels[i,num:,0] = label[makeup_indices]
     return sample_datas, sample_labels
 
-def room2samples_plus_normalized(data_label, num_point):
-    """ room2sample, with input filename and RGB preprocessing.
-        for each block centralize XYZ, add normalized XYZ as 678 channels
-    """
-    data = data_label[:,0:6]
-    data[:,3:6] /= 255.0
-    label = data_label[:,-1].astype(np.uint8)
-    max_room_x = max(data[:,0])
-    max_room_y = max(data[:,1])
-    max_room_z = max(data[:,2])
-    #print(max_room_x, max_room_y, max_room_z)
+# def room2samples_plus_normalized(data_label, num_point):
+#     """ room2sample, with input filename and RGB preprocessing.
+#         for each block centralize XYZ, add normalized XYZ as 678 channels
+#     """
+#     data = data_label[:,0:6]
+#     data[:,3:6] /= 255.0
+#     label = data_label[:,-1].astype(np.uint8)
+#     max_room_x = max(data[:,0])
+#     max_room_y = max(data[:,1])
+#     max_room_z = max(data[:,2])
+#     #print(max_room_x, max_room_y, max_room_z)
     
-    data_batch, label_batch = room2samples(data, label, num_point)
-    new_data_batch = np.zeros((data_batch.shape[0], num_point, 9))
-    for b in range(data_batch.shape[0]):
-        new_data_batch[b, :, 6] = data_batch[b, :, 0]/max_room_x
-        new_data_batch[b, :, 7] = data_batch[b, :, 1]/max_room_y
-        new_data_batch[b, :, 8] = data_batch[b, :, 2]/max_room_z
-        #minx = min(data_batch[b, :, 0])
-        #miny = min(data_batch[b, :, 1])
-        #data_batch[b, :, 0] -= (minx+block_size/2)
-        #data_batch[b, :, 1] -= (miny+block_size/2)
-    new_data_batch[:, :, 0:6] = data_batch
-    return new_data_batch, label_batch
+#     data_batch, label_batch = room2samples(data, label, num_point)
+#     new_data_batch = np.zeros((data_batch.shape[0], num_point, 9))
+#     for b in range(data_batch.shape[0]):
+#         new_data_batch[b, :, 6] = data_batch[b, :, 0]/max_room_x
+#         new_data_batch[b, :, 7] = data_batch[b, :, 1]/max_room_y
+#         new_data_batch[b, :, 8] = data_batch[b, :, 2]/max_room_z
+#         #minx = min(data_batch[b, :, 0])
+#         #miny = min(data_batch[b, :, 1])
+#         #data_batch[b, :, 0] -= (minx+block_size/2)
+#         #data_batch[b, :, 1] -= (miny+block_size/2)
+#     new_data_batch[:, :, 0:6] = data_batch
+#     return new_data_batch, label_batch
 
 
-def room2samples_wrapper_normalized(data_label_filename, num_point):
-    if data_label_filename[-3:] == 'txt':
-        data_label = np.loadtxt(data_label_filename)
-    elif data_label_filename[-3:] == 'npy':
-        data_label = np.load(data_label_filename)
-    else:
-        print('Unknown file type! exiting.')
-        exit()
-    return room2samples_plus_normalized(data_label, num_point)
+# def room2samples_wrapper_normalized(data_label_filename, num_point):
+#     if data_label_filename[-3:] == 'txt':
+#         data_label = np.loadtxt(data_label_filename)
+#     elif data_label_filename[-3:] == 'npy':
+#         data_label = np.load(data_label_filename)
+#     else:
+#         print('Unknown file type! exiting.')
+#         exit()
+#     return room2samples_plus_normalized(data_label, num_point)
 
 
 # -----------------------------------------------------------------------------

@@ -57,8 +57,8 @@ class S3DISDataset(Dataset):
             block_min = center - [self.block_size / 2.0, self.block_size / 2.0, 0]
             block_max = center + [self.block_size / 2.0, self.block_size / 2.0, 0]
             point_idxs = np.where((points[:, 0] >= block_min[0]) & (points[:, 0] <= block_max[0]) & (points[:, 1] >= block_min[1]) & (points[:, 1] <= block_max[1]))[0]
-            if point_idxs.size > 1024:
-                # print("Point size: ", point_idxs.size)
+            # print("Point size: ", point_idxs.size)
+            if point_idxs.size > 4096:
                 break
 
         if point_idxs.size >= self.num_point:
@@ -86,7 +86,7 @@ class S3DISDataset(Dataset):
 
 class ScannetDatasetWholeScene():
     # prepare to give prediction on each points
-    def __init__(self, root, block_points=4096, split='test', test_scene=3, stride=500, block_size=1000.0, padding=0.001):
+    def __init__(self, root, block_points=4096, split='test', test_scene=3, stride=0.5, block_size=1.0, padding=0.001):
         self.block_points = block_points
         self.block_size = block_size
         self.padding = padding
