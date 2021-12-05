@@ -48,7 +48,7 @@ def parse_args():
     parser.add_argument('--npoint', type=int, default=12280, help='Point Number [default: 4096]')
     parser.add_argument('--step_size', type=int, default=10, help='Decay step for lr decay [default: every 10 epochs]')
     parser.add_argument('--lr_decay', type=float, default=0.7, help='Decay rate for lr decay [default: 0.7]')
-    parser.add_argument('--test_scene', type=int, default=1, help='Which scene to use for test')
+    parser.add_argument('--test_scene', type=int, default=2, help='Which scene to use for test')
 
     return parser.parse_args()
 
